@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/zichouu/go-pkg/color"
 )
@@ -28,13 +29,17 @@ func Run(dir string, aenv []string, command ...string) error {
 		cmd.Env = env
 	}
 	cmd.Dir = dir
-	errColor := color.BgGreen
+	errBgColor := color.BgGreen
+	errColor := color.Green
 	fmt.Println(color.BgBlue, "执行", dir, strings.Join(command, " "), color.Reset)
+	start := time.Now()
 	out, err := cmd.CombinedOutput()
+	finish := time.Since(start).Round(time.Millisecond)
 	if err != nil {
-		errColor = color.BgRed
+		errBgColor = color.BgRed
+		errColor = color.Red
 	}
-	fmt.Println(errColor, "完成", dir, strings.Join(command, " "), color.Reset)
+	fmt.Println(errBgColor, "完成", dir, strings.Join(command, " "), color.Reset, errColor, finish, color.Reset)
 	if err != nil {
 		fmt.Println(err)
 	}
