@@ -38,7 +38,9 @@ func Run(dir string, aenv []string, command ...string) error {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(string(out))
+	if len(out) > 0 {
+		fmt.Println(string(out))
+	}
 	return err
 }
 
