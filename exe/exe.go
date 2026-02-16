@@ -10,12 +10,19 @@ import (
 	"github.com/zichouu/go-pkg/color"
 )
 
-func Run(dir string, command string) error {
+func Run(dir string, command string, aenv []string) error {
 	var cmd *exec.Cmd
 	if runtime.GOOS == "windows" {
 		cmd = exec.Command("cmd", "/c", command)
 	} else {
 		cmd = exec.Command("sh", "-c", command)
+	}
+	if len(aenv) > 0 {
+		env := os.Environ()
+		for _, v := range aenv {
+			env = append(env, v)
+		}
+		cmd.Env = env
 	}
 	cmd.Dir = dir
 	errColor := color.BgGreen
@@ -32,11 +39,11 @@ func Run(dir string, command string) error {
 	return err
 }
 
-func IfExist(path string, filename string, command string) error {
+func IfExist(path string, filename string, command string, aenv []string) error {
 	join := filepath.Join(path, filename)
 	_, err := os.Stat(join)
 	if err == nil {
-		err := Run(path, command)
+		err := Run(path, command, aenv)
 		return err
 	}
 	return nil
