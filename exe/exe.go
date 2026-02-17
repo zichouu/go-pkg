@@ -17,8 +17,9 @@ func Run(dir string, aenv []string, command ...string) error {
 	if runtime.GOOS == "windows" {
 		for i, v := range command {
 			if strings.Contains(v, `"`) || strings.Contains(v, `'`) {
-				command[i] = strings.ReplaceAll(v, `"`, "")
-				command[i] = strings.ReplaceAll(v, `'`, "")
+				v = strings.ReplaceAll(v, `"`, "")
+				v = strings.ReplaceAll(v, `'`, "")
+				command[i] = v
 			}
 		}
 		arg := append([]string{"/c"}, command...)
