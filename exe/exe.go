@@ -15,10 +15,16 @@ import (
 func Run(dir string, aenv []string, command ...string) error {
 	var cmd *exec.Cmd
 	if runtime.GOOS == "windows" {
+		for i, v := range command {
+			if strings.Contains(v, `"`) || strings.Contains(v, `'`) {
+				command[i] = strings.ReplaceAll(v, `"`, "")
+				command[i] = strings.ReplaceAll(v, `'`, "")
+			}
+		}
 		arg := append([]string{"/c"}, command...)
 		cmd = exec.Command("cmd", arg...)
 	} else {
-		arg := append([]string{"-c"}, command...)
+		arg := append([]string{"-c"}, strings.Join(command, " "))
 		cmd = exec.Command("sh", arg...)
 	}
 	if len(aenv) > 0 {
