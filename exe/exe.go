@@ -18,7 +18,7 @@ func Run(dir string, aenv []string, command ...string) error {
 		arg := append([]string{"/c"}, command...)
 		cmd = exec.Command("cmd", arg...)
 	} else {
-		arg := append([]string{"-c"}, command...)
+		arg := append([]string{"-c"}, strings.Join(command, " "))
 		cmd = exec.Command("sh", arg...)
 	}
 	if len(aenv) > 0 {
