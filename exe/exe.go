@@ -30,9 +30,7 @@ func Run(dir string, aenv []string, command ...string) error {
 	}
 	if len(aenv) > 0 {
 		env := os.Environ()
-		for _, v := range aenv {
-			env = append(env, v)
-		}
+		env = append(env, aenv...)
 		cmd.Env = env
 	}
 	cmd.Dir = dir
