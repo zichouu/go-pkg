@@ -6,20 +6,9 @@ on:
   pull_request:
   workflow_dispatch:
 jobs:
-  Lint:
-    runs-on: ubuntu-latest
+  lint:
+    uses: zichouu/actions/.github/workflows/go-lint.yml@main
     permissions:
         contents: write
         pull-requests: read
         checks: write
-    steps:
-      - name: 1. Checkout
-        uses: actions/checkout@v6
-      - name: 2. Setup Go
-        uses: actions/setup-go@v6
-        with:
-          go-version: stable
-      - name: 3. Lint
-        uses: golangci/golangci-lint-action@v9
-        with:
-          version: latest
