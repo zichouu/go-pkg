@@ -57,9 +57,9 @@ func Run(dir string, aenv []string, command ...string) error {
 func IfExist(path string, filename string, aenv []string, command ...string) error {
 	join := filepath.Join(path, filename)
 	_, err := os.Stat(join)
-	if err != nil {
+	if err == nil {
+		err := Run(path, aenv, command...)
 		return err
 	}
-	err = Run(path, aenv, command...)
-	return err
+	return nil
 }
