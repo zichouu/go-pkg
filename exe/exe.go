@@ -12,7 +12,7 @@ import (
 	"github.com/zichouu/go-pkg/color"
 )
 
-func Run(dir string, aenv []string, command ...string) error {
+func Run(dir string, aenv []string, command ...string) (output []byte, err error) {
 	var cmd *exec.Cmd
 	if runtime.GOOS == "windows" {
 		for i, v := range command {
@@ -38,7 +38,7 @@ func Run(dir string, aenv []string, command ...string) error {
 	errColor := color.Green
 	fmt.Println(color.BgBlue, "执行", dir, strings.Join(command, " "), color.Reset)
 	start := time.Now()
-	out, err := cmd.CombinedOutput()
+	output, err = cmd.CombinedOutput()
 	finish := time.Since(start).Round(time.Millisecond)
 	if err != nil {
 		errBgColor = color.BgRed
@@ -48,18 +48,18 @@ func Run(dir string, aenv []string, command ...string) error {
 	if err != nil {
 		fmt.Println(err)
 	}
-	if len(out) > 0 {
-		fmt.Println(string(out))
+	if len(output) > 0 {
+		fmt.Println(string(output))
 	}
-	return err
+	return output, err
 }
 
-func IfExist(path string, filename string, aenv []string, command ...string) error {
+func IfExist(path string, filename string, aenv []string, command ...string) (output []byte, err error) {
 	join := filepath.Join(path, filename)
-	_, err := os.Stat(join)
+	_, err = os.Stat(join)
 	if err == nil {
-		err := Run(path, aenv, command...)
-		return err
+		output, err = Run(path, aenv, command...)
+		return output, err
 	}
-	return nil
+	return nil, nil
 }
